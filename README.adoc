@@ -1,0 +1,43 @@
+= Asciidoctorj + Maven: including docs from JARs
+
+This example project shows how to extend Asciidoctorj to support including documents from Java JARs.
+To do so, an _Include processor_ extensions has been implemented.
+This only processes includes prefixed with the key word `classpath` looking for the content in the classpath.
+
+NOTE: This project was inspired by https://github.com/asciidoctor/asciidoctor-maven-plugin/issues/490.
+
+== Modules
+
+* `included-content`: module containing AsciiDoc sources to be used by other modules.
+* `classpath-include-processor`: Java module containing the include processor extension.
+* `aggregator`: module responsible for converting the documents using https://github.com/asciidoctor/asciidoctor-maven-plugin[asciidoctor-maven-plugin].
+
+== How to run the example
+
+. Install plugin and content to include locally.
++
+From root run:
+
+ mvn install -pl classpath-include-processor,included-content
+
+. Run the conversion process.
++
+From within _aggregator_ directory.
+
+ mvn generate-resources
++
+TIP: You can debug the include processor using `mvnDebug generate-resources` and using a remote debug connection on the indicated port.
+
+. Checking the results.
++
+We will obtain the generated HTML in _target/example-manual.html_.
+There we see the texts `content from src/docs/asciidoc/subdir/_b.adoc.` and `content from src/docs/asciidoc/subdir/c.adoc.` proving the inclusion of contents form the `included-content` JAR.
+
+== Known issues
+
+=== Importing other resources from jars
+
+Other resources like image inclusion are not directly related to the `include` directives, but relevant if we want to use JARs to reuse content.
+Even if it's possible to include content using this extension, other resources like images would require additional custom solutions.
+
+Given image inclusion cannot be extented, a custom block macro could be implemented, but that means diverting too much from AsciiDoc syntax.

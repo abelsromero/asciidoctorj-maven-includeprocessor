@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.asciidoctor.includes</groupId>
+  <artifactId>aggregator</artifactId>
+  <version>1.0-SNAPSHOT</version>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
+    <asciidoctor.maven.plugin.version>2.1.0</asciidoctor.maven.plugin.version>
+    <asciidoctorj.version>2.4.1</asciidoctorj.version>
+    <jruby.version>9.2.13.0</jruby.version>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+      </plugin>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.2.0</version>
+      </plugin>
+      <plugin>
+        <artifactId>maven-install-plugin</artifactId>
+        <version>2.5.2</version>
+      </plugin>
+      <plugin>
+        <groupId>org.asciidoctor</groupId>
+        <artifactId>asciidoctor-maven-plugin</artifactId>
+        <version>${asciidoctor.maven.plugin.version}</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.jruby</groupId>
+            <artifactId>jruby-complete</artifactId>
+            <version>${jruby.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.asciidoctor</groupId>
+            <artifactId>asciidoctorj</artifactId>
+            <version>${asciidoctorj.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.asciidoctor.includes</groupId>
+            <artifactId>classpath-include-processor</artifactId>
+            <version>1.0-SNAPSHOT</version>
+          </dependency>
+          <dependency>
+            <groupId>org.asciidoctor.includes</groupId>
+            <artifactId>included-content</artifactId>
+            <version>1.0-SNAPSHOT</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <attributes>
+            <endpoint-url>http://example.org</endpoint-url>
+<!--            <sourcedir>${project.build.sourceDirectory}</sourcedir>-->
+            <project-version>${project.version}</project-version>
+          </attributes>
+        </configuration>
+        <executions>
+          <execution>
+            <id>asciidoc-to-html</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>process-asciidoc</goal>
+            </goals>
+            <configuration>
+              <backend>html5</backend>
+              <attributes>
+                <source-highlighter>coderay</source-highlighter>
+                <imagesdir>./images</imagesdir>
+                <toc>left</toc>
+                <icons>font</icons>
+                <sectanchors>true</sectanchors>
+                <idprefix/>
+                <idseparator>-</idseparator>
+                <docinfo1>true</docinfo1>
+              </attributes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
